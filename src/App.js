@@ -1,43 +1,20 @@
 import React from "react";
+import axios from "axios";
 
-//Component Life Cycle
-//constructor => render => componentDidMount
-//update할 때 : componentDidUpdate
-//다른페이지로 이동(component종료) : componentWillUnmount
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("hello");
-  }
   state = {
-    count: 0,
+    isLoading: true,
+    movies: [],
   };
-  add = () => {
-    console.log("add");
-    this.setState((current) => ({ count: current.count + 1 }));
+  getMovies = async () => {
+    const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json");
   };
-  minus = () => {
-    console.log("minus");
-    this.setState((current) => ({ count: current.count - 1 }));
-  };
-  componentDidMount() {
-    console.log("component rendered");
-  }
-  componentDidUpdate() {
-    console.log("I just updated");
-  }
-  componentWillUnmount() {
-    console.log("Good bye");
+  async componentDidMount() {
+    this.getMovies();
   }
   render() {
-    console.log("I'm rendering");
-    return (
-      <div>
-        <h1>The number is {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
-    );
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading..." : "We are ready"}</div>;
   }
 }
 
